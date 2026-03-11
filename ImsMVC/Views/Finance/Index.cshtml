@@ -8,7 +8,12 @@
 <div class="min-h-screen bg-gray-50 flex items-center justify-center">
 
     <div class="w-full max-w-2xl bg-white shadow-xl rounded-2xl p-8">
-
+        @if (ViewBag.ErrorMessage != null)
+        {
+            <div class="mb-4 p-3 bg-red-100 text-red-700 rounded">
+                @ViewBag.ErrorMessage
+            </div>
+        }
         <h1 class="text-2xl font-bold text-gray-800 mb-2">
             Credit Simulation
         </h1>
@@ -41,9 +46,6 @@
                 <label class="block text-sm font-semibold text-gray-600">
                     OTR Price
                 </label>
-                @*<input type="number" name="OTR"
-                    value="240000000"
-                    class="w-full mt-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" />*@
                 <input type="text"
                        id="otr"
                        name="OTR"
@@ -65,14 +67,13 @@
                     Start Date
                 </label>
                 <input type="date" name="StartDate"
+                       id="startDate"
                        class="w-full mt-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" />
             </div>
 
             <button type="submit"
                     class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition">
-
                 Calculate Installment
-
             </button>
 
         </form>
@@ -81,42 +82,42 @@
 
 </div>
 
-
 @section Scripts {
 
     <script>
-
         const otrInput = document.getElementById("otr");
+        const startDateInput = document.getElementById("startDate");
 
+        // 1️⃣ Tampilkan harga dengan titik saat load
         if (otrInput) {
+            otrInput.value = formatNumber(otrInput.value);
 
             otrInput.addEventListener("keyup", function () {
-
                 let value = this.value.replace(/\./g, "");
-
                 if (value === "") return;
-
                 this.value = formatNumber(value);
-
             });
-
         }
 
-        function formatNumber(num) {
-
-            return num.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-
+        // 2️⃣ Default tanggal hari ini
+        if (startDateInput) {
+            const today = new Date();
+            const yyyy = today.getFullYear();
+            const mm = String(today.getMonth() + 1).padStart(2, '0');
+            const dd = String(today.getDate()).padStart(2, '0');
+            startDateInput.value = `${yyyy}-${mm}-${dd}`;
         }
 
-        // sebelum submit → hilangkan titik
+        // 3️⃣ Hilangkan titik sebelum submit
         document.querySelector("form").addEventListener("submit", function () {
-
             if (otrInput) {
                 otrInput.value = otrInput.value.replace(/\./g, "");
             }
-
         });
 
+        function formatNumber(num) {
+            return num.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        }
     </script>
 
 }

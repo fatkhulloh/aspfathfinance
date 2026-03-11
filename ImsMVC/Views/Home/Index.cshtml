@@ -3,33 +3,25 @@
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewBag.Title = "Index Home Page";
+
+    int currentPage = ViewBag.CurrentPage ?? 1;
+    int totalPages = ViewBag.TotalPages ?? 1;
 }
 
 <div class="max-w-7xl mx-auto mt-10 px-6">
 
     <div class="flex justify-between items-center mb-6">
-
-        <h1 class="text-2xl font-bold text-gray-800">
-            Finance Contract List
-        </h1>
-
+        <h1 class="text-2xl font-bold text-gray-800">Finance Contract List</h1>
         <a href="/Finance/Index"
            class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
-
             + New Contract
-
         </a>
-
     </div>
 
     <div class="bg-white shadow-lg rounded-xl overflow-hidden">
-
         <table class="min-w-full">
-
             <thead class="bg-gray-100 text-gray-600 text-sm uppercase">
-
                 <tr>
-
                     <th class="px-6 py-3 text-left">Contract No</th>
                     <th class="px-6 py-3 text-left">Client</th>
                     <th class="px-6 py-3 text-left">OTR</th>
@@ -38,61 +30,41 @@
                     <th class="px-6 py-3 text-left">Installment</th>
                     <th class="px-6 py-3 text-left">Start Date</th>
                     <th class="px-6 py-3 text-left">Action</th>
-
                 </tr>
-
             </thead>
-
             <tbody class="divide-y">
-
                 @foreach (var item in Model)
                 {
-
                     <tr class="hover:bg-gray-50 transition">
-
-                        <td class="px-6 py-4 font-semibold text-gray-700">
-                            @item.KontrakNo
-                        </td>
-
+                        <td class="px-6 py-4 font-semibold text-gray-700">@item.KontrakNo</td>
+                        <td class="px-6 py-4">@item.ClientName</td>
+                        <td class="px-6 py-4">Rp @item.OTR.ToString("N0")</td>
+                        <td class="px-6 py-4 text-green-600 font-medium">Rp @item.DP.ToString("N0")</td>
+                        <td class="px-6 py-4">@item.Tenor Months</td>
+                        <td class="px-6 py-4 font-semibold text-blue-600">Rp @item.AngsuranPerBulan.ToString("N0")</td>
+                        <td class="px-6 py-4 text-gray-500">@item.StartDate.ToString("dd MMM yyyy")</td>
                         <td class="px-6 py-4">
-                            @item.ClientName
-                        </td>
-
-                        <td class="px-6 py-4">
-                            Rp @item.OTR.ToString("N0")
-                        </td>
-
-                        <td class="px-6 py-4 text-green-600 font-medium">
-                            Rp @item.DP.ToString("N0")
-                        </td>
-
-                        <td class="px-6 py-4">
-                            @item.Tenor Months
-                        </td>
-
-                        <td class="px-6 py-4 font-semibold text-blue-600">
-                            Rp @item.AngsuranPerBulan.ToString("N0")
-                        </td>
-
-                        <td class="px-6 py-4 text-gray-500">
-                            @item.StartDate.ToString("dd MMM yyyy")
-                        </td>
-                        <td class="px-6 py-4">
-                            <a href="@Url.Action("Jadwal", "Finance", new { kontrakNo = @item.KontrakNo })"
+                            <a href="@Url.Action("Jadwal", "Finance", new { kontrakNo = item.KontrakNo })"
                                class="bg-indigo-600 text-white px-3 py-1 rounded-lg text-sm hover:bg-indigo-700 transition">
                                 View Schedule
                             </a>
-
                         </td>
-
                     </tr>
-
                 }
-
             </tbody>
-
         </table>
+    </div>
 
+    <!-- Pagination -->
+    <div class="flex justify-center mt-6 space-x-2">
+        @for (int i = 1; i <= totalPages; i++)
+        {
+            <a href="@Url.Action("Index", "Home", new { page = i })"
+               class="px-3 py-1 rounded-lg border
+                      @(i == currentPage ? "bg-blue-600 text-white border-blue-600" : "bg-white text-gray-700 border-gray-300 hover:bg-gray-100")">
+                @i
+            </a>
+        }
     </div>
 
 </div>
