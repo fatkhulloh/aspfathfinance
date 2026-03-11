@@ -1,39 +1,158 @@
-﻿<!DOCTYPE html>
-<html>
+﻿@using System.Web
+@using System.Web.Mvc
+
+@{
+    Layout = null;
+    var userId = Session["UserId"];
+    var username = Session["Username"] ?? "";
+
+    string pageTitle = ViewBag.Title ?? "FathFinance";
+    string metaDescription = ViewBag.MetaDescription ?? "";
+
+    var currentLang = "id";
+    string dir = "ltr";
+}
+
+<!DOCTYPE html>
+<html lang="@currentLang" dir="@dir">
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - My ASP.NET Application</title>
-    @Styles.Render("~/Content/css")
-    @Scripts.Render("~/bundles/modernizr")
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@pageTitle - FathFinance</title>
+    <meta name="description" content="@metaDescription" />
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#0f172a',
+                        accent: '#10b981',
+                        accentdark: '#059669'
+                    }
+                }
+            }
+        }
+    </script>
+
+    @RenderSection("HeadContent", required: false)
 </head>
-<body>
-    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark">
-        <div class="container">
-            @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-            <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" title="Toggle navigation" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between">
-                <ul class="navbar-nav flex-grow-1">
-                    <li>@Html.ActionLink("Home", "Index", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                    <li>@Html.ActionLink("About", "About", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                </ul>
+
+<body class="bg-gray-100 font-sans flex flex-col min-h-screen">
+
+    <!-- HEADER -->
+    <header class="bg-primary text-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto flex justify-between items-center py-4 px-6">
+
+            <!-- Logo -->
+            <a href="@Url.Action("Index", "Home", new { lang = currentLang })"
+               class="text-xl font-bold tracking-wide hover:opacity-90 transition">
+
+                Fath
+                <span class="-ml-2 bg-gradient-to-r from-emerald-400 to-green-500 bg-clip-text text-transparent">Finance
+                </span>
+
+            </a>
+
+            <!-- Mobile button -->
+            <div class="md:hidden">
+                <button id="mobile-menu-button" class="text-2xl">☰</button>
+            </div>
+
+            <!-- Desktop Menu -->
+            <nav class="hidden md:flex items-center space-x-6 text-sm font-medium">
+
+                @Html.ActionLink("Dashboard", "Index", "Home", new { lang = currentLang }, new { @class = "hover:text-gray-300 transition" })
+
+                @Html.ActionLink("Finance", "Index", "Finance", new { lang = currentLang }, new { @class = "hover:text-gray-300 transition" })
+
+                @if (userId == null)
+                {
+                    @Html.ActionLink("Login", "Login", "Auth", new { lang = currentLang },
+                    new { @class = "px-4 py-2 border border-gray-400 rounded-md hover:bg-gray-700 transition" })
+
+                    @Html.ActionLink("Register", "Register", "Auth", new { lang = currentLang },
+                    new { @class = "bg-accent px-4 py-2 rounded-md font-semibold hover:bg-accentdark transition" })
+                }
+                else
+                {
+                    <div class="relative">
+                        <button onclick="toggleUserMenu()" class="font-medium hover:text-gray-300">
+                            @username
+                        </button>
+
+                        <div id="userDropdown"
+                             class="hidden absolute right-0 mt-2 w-40 bg-white text-gray-700 rounded-md shadow-lg py-2">
+
+                            @Html.ActionLink("Logout", "Logout", "Auth", new { lang = currentLang },
+                            new { @class = "block px-4 py-2 hover:bg-gray-100" })
+
+                        </div>
+                    </div>
+                }
+
+            </nav>
+
+        </div>
+
+        <!-- MOBILE MENU -->
+        <div id="mobile-menu" class="hidden md:hidden bg-primary border-t border-gray-700">
+            <div class="flex flex-col px-6 py-4 space-y-2 text-sm">
+
+                @Html.ActionLink("Dashboard", "Index", "Home", new { lang = currentLang },
+                new { @class = "hover:text-gray-300" })
+
+                @Html.ActionLink("Finance", "Index", "Finance", new { lang = currentLang },
+                new { @class = "hover:text-gray-300" })
+
+                @if (userId == null)
+                {
+                    @Html.ActionLink("Login", "Login", "Auth", new { lang = currentLang },
+                    new { @class = "mt-2 border border-gray-400 px-4 py-2 rounded-md" })
+
+                    @Html.ActionLink("Register", "Register", "Auth", new { lang = currentLang },
+                    new { @class = "bg-accent px-4 py-2 rounded-md font-semibold" })
+                }
+                else
+                {
+                    <span class="px-4 py-2">@username</span>
+
+                    @Html.ActionLink("Logout", "Logout", "Auth", new { lang = currentLang },
+                    new { @class = "px-4 py-2 hover:bg-gray-700 rounded" })
+                }
+
             </div>
         </div>
-    </nav>
-    <div class="container body-content">
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
-        </footer>
-    </div>
+    </header>
 
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
-    @RenderSection("scripts", required: false)
+
+    <!-- MAIN CONTENT -->
+    <main class="flex-grow container mx-auto mt-10 px-4 md:px-6">
+        @RenderBody()
+    </main>
+
+
+    <!-- FOOTER -->
+    <footer class="bg-white border-t mt-16">
+        <div class="container mx-auto px-6 py-6 text-center text-sm text-gray-500">
+            © @DateTime.Now.Year FathFinance — Financial Management Platform
+        </div>
+    </footer>
+
+
+    <script>
+        document.getElementById('mobile-menu-button').addEventListener('click', () => {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        });
+
+        function toggleUserMenu() {
+            document.getElementById("userDropdown").classList.toggle("hidden");
+        }
+    </script>
+
+    @RenderSection("Scripts", required: false)
+
 </body>
 </html>
