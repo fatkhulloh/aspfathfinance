@@ -1,0 +1,87 @@
+﻿@model FinanceMvc.Models.LoanModel
+
+@{
+    ViewBag.Title = "Finance Result | FathFinance";
+}
+
+<div class="min-h-screen bg-gray-50 flex items-center justify-center">
+
+    <div class="w-full max-w-3xl bg-white shadow-xl rounded-2xl p-8">
+
+        <div class="flex justify-between items-center mb-6">
+
+            <div>
+                <h1 class="text-2xl font-bold text-gray-800">
+                    Finance Result
+                </h1>
+                <p class="text-gray-500 text-sm">
+                    Loan calculation summary
+                </p>
+            </div>
+
+            <span class="bg-blue-100 text-blue-600 px-4 py-1 rounded-lg text-sm font-semibold">
+                @Model.KontrakNo
+            </span>
+
+        </div>
+
+        <div class="grid grid-cols-2 gap-6">
+
+            <div class="bg-gray-50 p-4 rounded-lg">
+                <p class="text-gray-500 text-sm">Client</p>
+                <p class="font-semibold text-lg">@Model.ClientName</p>
+            </div>
+
+            <div class="bg-gray-50 p-4 rounded-lg">
+                <p class="text-gray-500 text-sm">OTR Price</p>
+                <p class="font-semibold text-lg">
+                    Rp @Model.OTR.ToString("N0")
+                </p>
+            </div>
+
+            <div class="bg-gray-50 p-4 rounded-lg">
+                <p class="text-gray-500 text-sm">Down Payment</p>
+                <p class="font-semibold text-lg text-green-600">
+                    Rp @Model.DP.ToString("N0")
+                </p>
+            </div>
+
+            <div class="bg-gray-50 p-4 rounded-lg">
+                <p class="text-gray-500 text-sm">Loan Principal</p>
+                <p class="font-semibold text-lg">
+                    Rp @Model.PokokUtang.ToString("N0")
+                </p>
+            </div>
+
+            <div class="bg-gray-50 p-4 rounded-lg">
+                <p class="text-gray-500 text-sm">Total Debt</p>
+                <p class="font-semibold text-lg text-red-500">
+                    Rp @Model.TotalHutang.ToString("N0")
+                </p>
+            </div>
+
+            <div class="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                <p class="text-gray-500 text-sm">Monthly Installment</p>
+
+                <p class="font-bold text-2xl text-blue-600">
+                    Rp @Model.AngsuranPerBulan.ToString("N0")
+                </p>
+
+            </div>
+
+        </div>
+
+        <div class="mt-8 text-center">
+
+            <a href="/Finance/Index"
+               class="bg-gray-800 text-white px-6 py-2 rounded-lg hover:bg-gray-900 transition">
+
+                Back to Simulation
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>

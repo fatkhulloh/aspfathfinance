@@ -1,0 +1,121 @@
+﻿@model ImsMVC.Models.LoanModel
+
+@{
+    ViewBag.Title = "Finance | FathFinance";
+}
+
+<div class="min-h-screen bg-gray-50 flex items-center justify-center">
+
+    <div class="w-full max-w-2xl bg-white shadow-xl rounded-2xl p-8">
+
+        <h1 class="text-2xl font-bold text-gray-800 mb-2">
+            Credit Simulation
+        </h1>
+
+        <p class="text-gray-500 mb-6">
+            Calculate monthly installment for vehicle financing
+        </p>
+
+        <form method="post" action="/Finance/Hitung" class="space-y-5">
+
+            <div>
+                <label class="block text-sm font-semibold text-gray-600">
+                    Contract Number
+                </label>
+                <input type="text" name="KontrakNo"
+                       value="AGR00001"
+                       class="w-full mt-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" />
+            </div>
+
+            <div>
+                <label class="block text-sm font-semibold text-gray-600">
+                    Client Name
+                </label>
+                <input type="text" name="ClientName"
+                       value="Sugus"
+                       class="w-full mt-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" />
+            </div>
+
+            <div>
+                <label class="block text-sm font-semibold text-gray-600">
+                    OTR Price
+                </label>
+                @*<input type="number" name="OTR"
+                    value="240000000"
+                    class="w-full mt-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" />*@
+                <input type="text"
+                       id="otr"
+                       name="OTR"
+                       value="240000000"
+                       class="w-full mt-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" />
+            </div>
+
+            <div>
+                <label class="block text-sm font-semibold text-gray-600">
+                    Tenor (Months)
+                </label>
+                <input type="number" name="Tenor"
+                       value="18"
+                       class="w-full mt-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" />
+            </div>
+
+            <div>
+                <label class="block text-sm font-semibold text-gray-600">
+                    Start Date
+                </label>
+                <input type="date" name="StartDate"
+                       class="w-full mt-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" />
+            </div>
+
+            <button type="submit"
+                    class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition">
+
+                Calculate Installment
+
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+@section Scripts {
+
+    <script>
+
+        const otrInput = document.getElementById("otr");
+
+        if (otrInput) {
+
+            otrInput.addEventListener("keyup", function () {
+
+                let value = this.value.replace(/\./g, "");
+
+                if (value === "") return;
+
+                this.value = formatNumber(value);
+
+            });
+
+        }
+
+        function formatNumber(num) {
+
+            return num.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+
+        }
+
+        // sebelum submit → hilangkan titik
+        document.querySelector("form").addEventListener("submit", function () {
+
+            if (otrInput) {
+                otrInput.value = otrInput.value.replace(/\./g, "");
+            }
+
+        });
+
+    </script>
+
+}
