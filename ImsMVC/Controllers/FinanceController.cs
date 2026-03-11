@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Web.Mvc;
-using MySqlConnector;
+using MySql.Data.MySqlClient;
 using System.Configuration;
 
 namespace ImsMVC.Controllers
