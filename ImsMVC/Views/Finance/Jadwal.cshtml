@@ -1,0 +1,39 @@
+﻿@model List<ImsMVC.Models.JadwalAngsuran>
+
+@{
+    ViewBag.Title = "Installment Schedule";
+}
+
+<div class="max-w-5xl mx-auto mt-10">
+
+    <h1 class="text-2xl font-bold mb-6">
+        Installment Schedule
+    </h1>
+
+    <div class="bg-white shadow-lg rounded-xl overflow-hidden">
+        <table class="min-w-full">
+            <thead class="bg-gray-100 text-gray-600">
+                <tr>
+                    <th class="px-6 py-3 text-left">Installment</th>
+                    <th class="px-6 py-3 text-left">Amount</th>
+                    <th class="px-6 py-3 text-left">Due Date</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y">
+                @foreach (var item in Model)
+                {
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4">@item.AngsuranKe</td>
+                        <td class="px-6 py-4 font-semibold text-blue-600">
+                            Rp @String.Format("{0:N0}", item.AngsuranPerBulan)
+                        </td>
+                        <td class="px-6 py-4 text-gray-600">
+                            @item.TanggalJatuhTempo.ToString("dd MMM yyyy")
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+</div>

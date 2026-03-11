@@ -127,40 +127,32 @@ namespace ImsMVC.Controllers
         // ===============================
         public ActionResult Jadwal(string kontrakNo)
         {
-            List<dynamic> jadwal = new List<dynamic>();
+            List<JadwalAngsuran> jadwal = new List<JadwalAngsuran>();
 
             using (MySqlConnection con = new MySqlConnection(conn))
             {
-
-                string sql = @"SELECT 
-                                ANGSURAN_KE,
-                                ANGSURAN_PER_BULAN,
-                                TANGGAL_JATUH_TEMPO
+                string sql = @"SELECT ANGSURAN_KE, ANGSURAN_PER_BULAN, TANGGAL_JATUH_TEMPO
                                FROM JADWAL_ANGSURAN
-                               WHERE KONTRAK_NO = @kontrak";
+                               WHERE KONTRAK_NO = @kontrak
+                               ORDER BY ANGSURAN_KE";
 
                 MySqlCommand cmd = new MySqlCommand(sql, con);
-
                 cmd.Parameters.AddWithValue("@kontrak", kontrakNo);
-
                 con.Open();
-
-                MySqlDataReader rd = cmd.ExecuteReader();
+                var rd = cmd.ExecuteReader();
 
                 while (rd.Read())
                 {
-                    jadwal.Add(new
+                    jadwal.Add(new JadwalAngsuran
                     {
                         AngsuranKe = rd.GetInt32("ANGSURAN_KE"),
-                        Angsuran = rd.GetDecimal("ANGSURAN_PER_BULAN"),
-                        JatuhTempo = rd.GetDateTime("TANGGAL_JATUH_TEMPO")
+                        AngsuranPerBulan = rd.GetDecimal("ANGSURAN_PER_BULAN"),
+                        TanggalJatuhTempo = rd.GetDateTime("TANGGAL_JATUH_TEMPO")
                     });
                 }
             }
 
-            ViewBag.Jadwal = jadwal;
-
-            return View();
+            return View(jadwal); // langsung kirim model ke view
         }
 
     }
