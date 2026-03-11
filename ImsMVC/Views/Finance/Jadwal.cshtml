@@ -1,7 +1,9 @@
 ﻿@model List<ImsMVC.Models.JadwalAngsuran>
 
 @{
+    Layout = "~/Views/Shared/_Layout.cshtml";
     ViewBag.Title = "Installment Schedule";
+    var now = DateTime.Now;
 }
 
 <div class="max-w-5xl mx-auto mt-10">
@@ -22,7 +24,8 @@
             <tbody class="divide-y">
                 @foreach (var item in Model)
                 {
-                    <tr class="hover:bg-gray-50">
+                    var isCurrentMonth = item.TanggalJatuhTempo.Month == now.Month && item.TanggalJatuhTempo.Year == now.Year;
+                    <tr class="hover:bg-gray-50 @(isCurrentMonth ? "bg-yellow-100 font-bold" : "")">
                         <td class="px-6 py-4">@item.AngsuranKe</td>
                         <td class="px-6 py-4 font-semibold text-blue-600">
                             Rp @String.Format("{0:N0}", item.AngsuranPerBulan)

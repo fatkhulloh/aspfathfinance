@@ -60,9 +60,50 @@ namespace ImsMVC.Controllers
             }
 
             ViewBag.CurrentPage = page;
-            ViewBag.TotalPages = (int)System.Math.Ceiling((double)totalCount / pageSize);
+            ViewBag.TotalPages = (int)Math.Ceiling((double)totalCount / pageSize);
 
             return View(list);
+        }
+
+        // POST: /Home/Delete?kontrakNo=XXX
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Delete(string kontrakNo)
+        {
+            if (string.IsNullOrEmpty(kontrakNo))
+                return RedirectToAction("Index");
+
+            try
+            {
+                using (var con = new MySqlConnection(conn))
+                {
+                    con.Open();
+
+                    // 1️⃣ Hapus jadwal angsuran yang terkait
+                    string deleteJadwal = "DELETE FROM JADWAL_ANGSURAN WHERE KONTRAK_NO=@kontrak";
+                    using (var cmd = new MySqlCommand(deleteJadwal, con))
+                    {
+                        cmd.Parameters.AddWithValue("@kontrak", kontrakNo);
+                        cmd.ExecuteNonQuery();
+                    }
+
+                    // 2️⃣ Baru hapus kontrak
+                    string deleteKontrak = "DELETE FROM KONTRAK WHERE KONTRAK_NO=@kontrak";
+                    using (var cmd = new MySqlCommand(deleteKontrak, con))
+                    {
+                        cmd.Parameters.AddWithValue("@kontrak", kontrakNo);
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+
+                TempData["Success"] = $"Contract {kontrakNo} successfully deleted.";
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = $"Failed to delete contract {kontrakNo}: {ex.Message}";
+            }
+
+            return RedirectToAction("Index");
         }
     }
 }

@@ -2,7 +2,7 @@
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
-    ViewBag.Title = "Index Home Page";
+    ViewBag.Title = "Finance Contracts";
 
     int currentPage = ViewBag.CurrentPage ?? 1;
     int totalPages = ViewBag.TotalPages ?? 1;
@@ -43,11 +43,24 @@
                         <td class="px-6 py-4">@item.Tenor Months</td>
                         <td class="px-6 py-4 font-semibold text-blue-600">Rp @item.AngsuranPerBulan.ToString("N0")</td>
                         <td class="px-6 py-4 text-gray-500">@item.StartDate.ToString("dd MMM yyyy")</td>
-                        <td class="px-6 py-4">
+                        <td class="px-6 py-4 space-x-2">
+                            @*<a href="@Url.Action("Edit", "Home", new { kontrakNo = item.KontrakNo })"
+                               class="bg-indigo-600 text-white px-3 py-1 rounded-lg text-sm hover:bg-indigo-700 transition">
+                                Edit
+                            </a>*@
                             <a href="@Url.Action("Jadwal", "Finance", new { kontrakNo = item.KontrakNo })"
                                class="bg-indigo-600 text-white px-3 py-1 rounded-lg text-sm hover:bg-indigo-700 transition">
                                 View Schedule
                             </a>
+
+                            @using (Html.BeginForm("delete", "Home", new { kontrakNo = item.KontrakNo }, FormMethod.Post, new { onsubmit = "return confirm('Are you sure you want to delete this contract?');", style = "display:inline;" }))
+                            {
+                                @Html.AntiForgeryToken()
+                                <button type="submit"
+                                        class="bg-red-600 text-white px-3 py-1 rounded-lg text-sm hover:bg-red-700 transition">
+                                    Delete
+                                </button>
+                            }
                         </td>
                     </tr>
                 }
@@ -66,5 +79,4 @@
             </a>
         }
     </div>
-
 </div>

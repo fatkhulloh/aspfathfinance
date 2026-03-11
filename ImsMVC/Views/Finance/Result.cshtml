@@ -72,13 +72,16 @@
 
         </div>
 
-        <div class="mt-8 text-center">
+        <div class="mt-8 flex justify-center gap-4">
 
-            <a href="/Finance/Index"
+            <a href="@Url.Action("Index", "Finance")"
                class="bg-gray-800 text-white px-6 py-2 rounded-lg hover:bg-gray-900 transition">
-
                 Back to Simulation
+            </a>
 
+            <a href="@Url.Action("Jadwal", "Finance", new { kontrakNo = Model.KontrakNo })"
+               class="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700 transition">
+                View Schedule
             </a>
 
         </div>
